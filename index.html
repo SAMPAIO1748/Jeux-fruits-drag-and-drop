@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <title>Fruit Drag and Drop</title>
+  <style>
+    body{
+        background-image: url("img/bg.png");
+    }
+    .fruit {
+      width: 30%;
+      height: auto;
+      cursor: move;
+      margin: 0 1.5%;
+      display: flex; 
+      justify-content: center; 
+      align-items: center
+    }
+
+    .box {
+      width: 30%;
+      height: 60vh;
+      border: 2px dashed #ccc;
+      margin: 0 1.5%;
+      padding: 10px;
+      display: inline-block;
+    }
+
+    #redBox { background-color: red; }
+    #yellowBox { background-color: yellow; }
+    #orangeBox { background-color: orange; }
+
+    .center{
+        margin: 0 5%;
+    }
+
+    #successButton {
+      display: none;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: green;
+      color: white;
+      border: none;
+      cursor: pointer;
+      width: 35%;
+    }
+    .button{
+      display: flex; 
+      justify-content: center; 
+      align-items: center
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="row justify-contain-around center">
+    <div id="fraise" class="fruit" draggable="true" ondragstart="drag(event)" data-color="red">
+        <img src="img/fraise.png" alt="" id="fraise" class="img-fluid align-items-center" draggable="true" ondragstart="drag(event)" data-color="red">
+    </div>
+    <div id="banana" class="fruit" draggable="true" ondragstart="drag(event)" data-color="yellow">
+        <img src="img/banane.png" alt="" id="banana" class="img-fluid" draggable="true" ondragstart="drag(event)" data-color="yellow">
+    </div>
+    <div id="orange" class="fruit" draggable="true" ondragstart="drag(event)" data-color="orange">
+        <img src="img/orange.png" alt="" id="orange" class="img-fluid" draggable="true" ondragstart="drag(event)" data-color="orange">    
+    </div>
+</div>
+  
+<div class="row justify-contain-around center">
+    <div  class="box" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <img src="img/corbeille.png" alt="" class="img-fluid" id="redBox">
+    </div>
+    <div  class="box" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <img src="img/corbeille.png" alt="" class="img-fluid" id="yellowBox">
+    </div>
+    <div  class="box" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <img src="img/corbeille.png" alt="" class="img-fluid" id="orangeBox">
+    </div>
+</div>
+
+<div class="row center button">
+    <button id="successButton">Bravo vous avez fini le niveau</button>
+</div>
+
+
+  <script>
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function drag(event) {
+      // La méthode dataTransfer.setData() définit le type de données et la valeur des données glissées
+      event.dataTransfer.setData("text", event.target.id);
+    }
+
+    function drop(event) {
+      event.preventDefault();
+
+      //La méthode dataTransfer.getData() récupère les données (élément déplacé) sous forme de chaîne de texte
+      const data = event.dataTransfer.getData("text");
+      const draggedElement = document.getElementById(data);
+
+      // Obtient la couleur du fruit glissé
+      const fruitColor = draggedElement.getAttribute("data-color");
+
+      // Obtient la couleur de la box
+      const boxColor = event.target.id.replace("Box", "");
+
+      // Vérifiez si la couleur du fruit correspond à la couleur de la box
+      if (fruitColor === boxColor) {
+        // Ajouter l'élément glissé à la cible
+        event.target.appendChild(draggedElement);
+        checkSuccess();
+      } else {
+        alert("Tu t'es trompé ! Essaie encore !!!!");
+      }
+
+      function checkSuccess() {
+      // Vérifiez si tous les fruits sont dans leurs bonnes boîtes
+      const redBox = document.getElementById("redBox").firstElementChild;
+      const yellowBox = document.getElementById("yellowBox").firstElementChild;
+      const orangeBox = document.getElementById("orangeBox").firstElementChild;
+
+      if (redBox && yellowBox && orangeBox) {
+        console.log('bravo');
+        // Tous les fruits sont dans leurs bonnes cases, affiche le bouton
+        document.getElementById("successButton").style.display = "block";
+      }
+    }
+    }
+  </script>
+
+</body>
+</html>
